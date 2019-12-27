@@ -251,6 +251,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionGrid"/>
+   <addaction name="actionOpen3DViewer"/>
   </widget>
   <widget class="librepcb::project::editor::SearchToolBar" name="searchToolbar">
    <property name="windowTitle">
@@ -928,6 +929,11 @@
    </property>
    <property name="text">
     <string>Import DXF</string>
+   </property>
+  </action>
+  <action name="actionOpen3DViewer">
+   <property name="text">
+    <string>Open 3D Viewer</string>
    </property>
   </action>
  </widget>

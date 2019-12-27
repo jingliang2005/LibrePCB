@@ -257,6 +257,8 @@ add_library(
   network/repository.cpp
   network/repository.h
   norms.h
+  occ/opencascadeview.cpp
+  occ/opencascadeview.h
   pnp/pickplacecsvwriter.cpp
   pnp/pickplacecsvwriter.h
   pnp/pickplacedata.cpp
@@ -371,6 +373,65 @@ target_link_libraries(
          MuParser::MuParser
          Polyclipping::Polyclipping
          FontoBene::FontoBeneQt5
+         TKernel
+         TKMath
+         TKG2d
+         TKG3d
+         TKGeomBase
+         TKBRep
+         TKGeomAlgo
+         TKTopAlgo
+         TKPrim
+         TKBO
+         TKShHealing
+         TKBool
+         TKHLR
+         TKFillet
+         TKOffset
+         TKFeat
+         TKMesh
+         TKXMesh
+         TKService
+         TKV3d
+         TKOpenGl
+         TKMeshVS
+         # TKIVtk
+         TKCDF
+         TKLCAF
+         TKCAF
+         TKBinL
+         TKXmlL
+         TKBin
+         TKXml
+         TKStdL
+         TKStd
+         TKTObj
+         TKBinTObj
+         TKXmlTObj
+         TKVCAF
+         TKXSBase
+         TKSTEPBase
+         TKSTEPAttr
+         TKSTEP209
+         TKSTEP
+         TKIGES
+         TKXCAF
+         TKXDEIGES
+         TKXDESTEP
+         TKSTL
+         TKVRML
+         TKXmlXCAF
+         TKBinXCAF
+         TKRWMesh
+         TKDraw
+         TKTopTest
+         TKViewerTest
+         TKXSDRAW
+         TKDCAF
+         TKXDEDRAW
+         TKTObjDRAW
+         TKQADraw
+         # TKIVtkDraw
          # Qt
          Qt5::Concurrent
          Qt5::Network

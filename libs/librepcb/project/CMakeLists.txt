@@ -6,6 +6,8 @@ set(CMAKE_AUTORCC OFF)
 # Export library
 add_library(
   librepcb_project STATIC
+  boards/3d/boardshape3d.cpp
+  boards/3d/boardshape3d.h
   boards/board.cpp
   boards/board.h
   boards/boardairwiresbuilder.cpp

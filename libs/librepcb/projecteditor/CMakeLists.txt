@@ -65,6 +65,8 @@ add_library(
   boardeditor/unplacedcomponentsdock.cpp
   boardeditor/unplacedcomponentsdock.h
   boardeditor/unplacedcomponentsdock.ui
+  boardviewer/boardviewer.cpp
+  boardviewer/boardviewer.h
   cmd/cmdaddcomponenttocircuit.cpp
   cmd/cmdaddcomponenttocircuit.h
   cmd/cmdadddevicetoboard.cpp

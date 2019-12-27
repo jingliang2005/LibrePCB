@@ -22,6 +22,7 @@
  ******************************************************************************/
 #include "boardeditor.h"
 
+#include "../boardviewer/boardviewer.h"
 #include "../dialogs/bomgeneratordialog.h"
 #include "../dialogs/projectpropertieseditordialog.h"
 #include "../docks/ercmsgdock.h"
@@ -41,10 +42,12 @@
 #include <librepcb/common/dialogs/filedialog.h>
 #include <librepcb/common/dialogs/gridsettingsdialog.h>
 #include <librepcb/common/fileio/fileutils.h>
+#include <librepcb/common/geometry/polygon.h>
 #include <librepcb/common/graphics/graphicsscene.h>
 #include <librepcb/common/graphics/graphicsview.h>
 #include <librepcb/common/graphics/primitivepathgraphicsitem.h>
 #include <librepcb/common/gridproperties.h>
+#include <librepcb/common/occ/opencascadeview.h>
 #include <librepcb/common/undostack.h>
 #include <librepcb/common/utils/exclusiveactiongroup.h>
 #include <librepcb/common/utils/undostackactiongroup.h>
@@ -55,7 +58,10 @@
 #include <librepcb/project/boards/cmd/cmdboardremove.h>
 #include <librepcb/project/boards/items/bi_device.h>
 #include <librepcb/project/boards/items/bi_footprint.h>
+#include <librepcb/project/boards/items/bi_netline.h>
+#include <librepcb/project/boards/items/bi_netsegment.h>
 #include <librepcb/project/boards/items/bi_plane.h>
+#include <librepcb/project/boards/items/bi_polygon.h>
 #include <librepcb/project/circuit/circuit.h>
 #include <librepcb/project/circuit/componentinstance.h>
 #include <librepcb/project/metadata/projectmetadata.h>
@@ -760,6 +766,15 @@ void BoardEditor::on_actionHideAllPlanes_triggered() {
     foreach (BI_Plane* plane, board->getPlanes()) {
       plane->setVisible(false);  // No undo command needed since it is not saved
     }
+  }
+}
+
+void BoardEditor::on_actionOpen3DViewer_triggered() {
+  if (Board* board = getActiveBoard()) {
+    BoardViewer* viewer = new BoardViewer(*board);
+    viewer->show();
+    viewer->raise();
+    viewer->activateWindow();
   }
 }
 

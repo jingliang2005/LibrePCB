@@ -169,16 +169,16 @@ void BoardClipperPathGenerator::addCopper(const QString& layerName,
   }
 
   // planes
-  foreach (const BI_Plane* plane, mBoard.getPlanes()) {
-    if ((plane->getLayerName() != layerName) ||
-        (&plane->getNetSignal() != netsignal)) {
-      continue;
-    }
-    foreach (const Path& p, plane->getFragments()) {
-      ClipperHelpers::unite(mPaths,
-                            ClipperHelpers::convert(p, mMaxArcTolerance));
-    }
-  }
+  // foreach (const BI_Plane* plane, mBoard.getPlanes()) {
+  //  if ((plane->getLayerName() != layerName) ||
+  //      (&plane->getNetSignal() != netsignal)) {
+  //    continue;
+  //  }
+  //  foreach (const Path& p, plane->getFragments()) {
+  //    ClipperHelpers::unite(mPaths,
+  //                          ClipperHelpers::convert(p, mMaxArcTolerance));
+  //  }
+  //}
 
   // devices
   foreach (const BI_Device* device, mBoard.getDeviceInstances()) {
