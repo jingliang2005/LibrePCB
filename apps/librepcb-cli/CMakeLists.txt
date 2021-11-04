@@ -63,5 +63,5 @@ if(WIN32)
   set(WINDOWS_APP_ICON_RESOURCE
       "${CMAKE_SOURCE_DIR}/cmake/WindowsExecutableResource.rc"
   )
-  target_sources(librepcb PUBLIC "${WINDOWS_APP_ICON_RESOURCE}")
+  #target_sources(librepcb PUBLIC "${WINDOWS_APP_ICON_RESOURCE}")
 endif()

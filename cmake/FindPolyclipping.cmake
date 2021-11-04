@@ -3,6 +3,7 @@ if(EXISTS "${POLYCLIPPING_SUBMODULE_BASEPATH}"
    AND NOT UNBUNDLE_POLYCLIPPING
    AND NOT UNBUNDLE_ALL
 )
+# 使用供应商的多边形裁剪
   message(STATUS "Using vendored Polyclipping")
 
   # Add library
@@ -11,7 +12,7 @@ if(EXISTS "${POLYCLIPPING_SUBMODULE_BASEPATH}"
     "${CMAKE_BINARY_DIR}/libs/polyclipping" EXCLUDE_FROM_ALL
   )
 
-  # Stop here, we're done
+  # Stop here, we're done 停在这里，我们完成了
   return()
 endif()
 

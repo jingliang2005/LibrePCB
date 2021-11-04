@@ -34,7 +34,7 @@ set(LIBREPCB_FILE_FORMAT_STABLE "false")
 project(librepcb LANGUAGES CXX)
 
 # Configure module path
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+#set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 # Global options
 option(BUILD_TESTS "Build unit tests." ON)
@@ -96,7 +96,7 @@ if(BUILD_DISALLOW_WARNINGS)
   target_compile_options(common INTERFACE -Werror)
 endif()
 
-# Find required Qt packages
+# Find required Qt packages 查找所需的 Qt 包
 find_package(
   Qt5 5.5.0
   COMPONENTS Concurrent
@@ -128,7 +128,7 @@ if("${Qt5Core_VERSION_MAJOR}.${Qt5Core_VERSION_MINOR}" VERSION_GREATER 5.14)
   target_compile_options(common INTERFACE -Wno-deprecated-declarations)
 endif()
 
-# Find third party libraries
+# Find third party libraries 查找第三方库
 find_package(DelaunayTriangulation REQUIRED)
 find_package(Dxflib REQUIRED)
 find_package(FontoBeneQt5 REQUIRED)
@@ -146,7 +146,7 @@ if(Qt5Core_VERSION VERSION_LESS 5.14)
   find_package(Hoedown REQUIRED)
 endif()
 
-# Add libs
+# Add libs 添加库
 add_subdirectory(libs/librepcb/common)
 add_subdirectory(libs/librepcb/library)
 add_subdirectory(libs/librepcb/project)
@@ -158,7 +158,7 @@ add_subdirectory(libs/librepcb/eagleimport)
 add_subdirectory(libs/parseagle)
 
 # Add apps
-add_subdirectory(apps/librepcb)
+#add_subdirectory(apps/librepcb)
 add_subdirectory(apps/librepcb-cli)
 add_subdirectory(apps/UuidGenerator)
 add_subdirectory(apps/EagleImport)
@@ -186,7 +186,7 @@ else()
   qt5_add_translation(LIBREPCB_QM_FILES ${LIBREPCB_TS_FILES} OPTIONS -silent)
 endif()
 add_custom_target(librepcb_translations DEPENDS ${LIBREPCB_QM_FILES})
-add_dependencies(librepcb librepcb_translations)
+#add_dependencies(librepcb librepcb_translations)
 
 # Install target for shared files
 file(
