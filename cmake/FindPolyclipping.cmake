@@ -17,11 +17,13 @@ if(EXISTS "${POLYCLIPPING_SUBMODULE_BASEPATH}"
 endif()
 
 # Otherwise, try to find shared library on the system via pkg-config
+# 否则，尝试通过 pkg-config 在系统上查找共享库
 find_package(PkgConfig QUIET)
 if(PKGCONFIG_FOUND)
   pkg_check_modules(Polyclipping GLOBAL IMPORTED_TARGET polyclipping)
 endif()
 if(Polyclipping_FOUND)
+    # 使用系统 polyclipping（通过 pkg-config）
   message(STATUS "Using system Polyclipping (via pkg-config)")
   add_library(Polyclipping::Polyclipping ALIAS PkgConfig::Polyclipping)
   return()

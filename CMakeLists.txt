@@ -37,7 +37,7 @@ project(librepcb LANGUAGES CXX)
 #set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 # Global options
-option(BUILD_TESTS "Build unit tests." ON)
+option(BUILD_TESTS "Build unit tests." OFF)
 option(BUILD_DISALLOW_WARNINGS
        "Disallow compiler warnings during build (build with -Werror)." OFF
 )
