@@ -1,42 +1,45 @@
 [submodule "libs/hoedown"]
     path = libs/hoedown
-    url = git@github.com:LibrePCB/hoedown.git
+	url = git@github.com:LibrePCB/hoedown.git
 [submodule "libs/quazip"]
     path = libs/quazip
-    url = git@github.com:LibrePCB/quazip.git
+	url = git@github.com:LibrePCB/quazip.git
 [submodule "libs/googletest"]
     path = libs/googletest
-    url = git@github.com:LibrePCB/googletest.git
+	url = git@github.com:LibrePCB/googletest.git
 [submodule "tests/data"]
     path = tests/data
-    url = git@github.com:LibrePCB/librepcb-test-data.git
+	url = git@github.com:LibrePCB/librepcb-test-data.git
 [submodule "libs/parseagle"]
     path = libs/parseagle
-    url = git@github.com:LibrePCB/parseagle.git
+	url = git@github.com:LibrePCB/parseagle.git
 [submodule "libs/fontobene"]
     path = libs/fontobene-qt5
     url = git@github.com:fontobene/fontobene-qt5.git
 [submodule "share/librepcb/fontobene"]
     path = share/librepcb/fontobene
-    url = git@github.com:LibrePCB/fontobene-fonts.git
+	url = git@github.com:LibrePCB/fontobene-fonts.git
 [submodule "libs/delaunay-triangulation"]
     path = libs/delaunay-triangulation
-    url = git@github.com:LibrePCB/delaunay-triangulation.git
+	url = git@github.com:LibrePCB/delaunay-triangulation.git
 [submodule "share/librepcb/fonts"]
     path = share/librepcb/fonts
-    url = git@github.com:LibrePCB/librepcb-fonts.git
+	url = git@github.com:LibrePCB/librepcb-fonts.git
 [submodule "libs/optional"]
     path = libs/optional
-    url = git@github.com:LibrePCB/optional.git
+	url = git@github.com:LibrePCB/optional.git
 [submodule "libs/type_safe"]
     path = libs/type_safe
-    url = git@github.com:LibrePCB/type_safe.git
+	url = git@github.com:LibrePCB/type_safe.git
 [submodule "i18n"]
     path = i18n
-    url = git@github.com:LibrePCB/librepcb-i18n.git
+	url = git@github.com:LibrePCB/librepcb-i18n.git
 [submodule "libs/muparser"]
     path = libs/muparser
-    url = git@github.com/LibrePCB/muparser.git
+	url = git@github.com:LibrePCB/muparser.git
 [submodule "libs/dxflib"]
     path = libs/dxflib
-    url = git@github.com/LibrePCB/dxflib.git
+	url = git@github.com:LibrePCB/dxflib.git
+
+[submodule "libs/fontobene-qt5"]
+	url = git@github.com:fontobene/fontobene-qt5.git
