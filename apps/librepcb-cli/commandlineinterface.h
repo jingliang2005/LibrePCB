@@ -32,11 +32,8 @@ namespace librepcb {
 
 class Application;
 class FilePath;
-class TransactionalFileSystem;
-
-namespace library {
 class LibraryBaseElement;
-}
+class TransactionalFileSystem;
 
 namespace cli {
 
@@ -66,18 +63,21 @@ private:  // Methods
                    const QStringList& exportBoardBomFiles,
                    const QString& bomAttributes, bool exportPcbFabricationData,
                    const QString& pcbFabricationSettingsPath,
-                   const QStringList& boards, bool save, bool strict) const
-      noexcept;
+                   const QStringList& exportPnpTopFiles,
+                   const QStringList& exportPnpBottomFiles,
+                   const QStringList& boardNames,
+                   const QStringList& boardIndices, bool removeOtherBoards,
+                   bool save, bool strict) const noexcept;
   bool openLibrary(const QString& libDir, bool all, bool save,
                    bool strict) const noexcept;
   void processLibraryElement(const QString& libDir, TransactionalFileSystem& fs,
-                             library::LibraryBaseElement& element, bool save,
+                             LibraryBaseElement& element, bool save,
                              bool strict, bool& success) const;
   static QString prettyPath(const FilePath& path,
                             const QString& style) noexcept;
   static bool failIfFileFormatUnstable() noexcept;
-  static void print(const QString& str, int newlines = 1) noexcept;
-  static void printErr(const QString& str, int newlines = 1) noexcept;
+  static void print(const QString& str) noexcept;
+  static void printErr(const QString& str) noexcept;
 
 private:  // Data
   const Application& mApp;
@@ -90,4 +90,4 @@ private:  // Data
 }  // namespace cli
 }  // namespace librepcb
 
-#endif  // LIBREPCB_CLI_COMMANDLINEINTERFACE_H
+#endif

@@ -20,17 +20,16 @@
 /*******************************************************************************
  *  Includes
  ******************************************************************************/
-#include "controlpanel/controlpanel.h"
-#include "firstrunwizard/firstrunwizard.h"
-#include "initializeworkspacewizard/initializeworkspacewizard.h"
-
-#include <librepcb/common/application.h>
-#include <librepcb/common/debug.h>
-#include <librepcb/common/dialogs/directorylockhandlerdialog.h>
-#include <librepcb/common/exceptions.h>
-#include <librepcb/common/network/networkaccessmanager.h>
-#include <librepcb/workspace/settings/workspacesettings.h>
-#include <librepcb/workspace/workspace.h>
+#include <librepcb/core/application.h>
+#include <librepcb/core/debug.h>
+#include <librepcb/core/exceptions.h>
+#include <librepcb/core/network/networkaccessmanager.h>
+#include <librepcb/core/workspace/workspace.h>
+#include <librepcb/core/workspace/workspacesettings.h>
+#include <librepcb/editor/dialogs/directorylockhandlerdialog.h>
+#include <librepcb/editor/editorcommandset.h>
+#include <librepcb/editor/workspace/controlpanel/controlpanel.h>
+#include <librepcb/editor/workspace/initializeworkspacewizard/initializeworkspacewizard.h>
 
 #include <QtCore>
 #include <QtWidgets>
@@ -39,8 +38,7 @@
  *  Namespace
  ******************************************************************************/
 using namespace librepcb;
-using namespace librepcb::workspace;
-using namespace librepcb::application;
+using namespace librepcb::editor;
 
 /*******************************************************************************
  *  Function Prototypes
@@ -93,7 +91,7 @@ int main(int argc, char* argv[]) {
   // Stop network access manager thread
   networkAccessManager.reset();
 
-  qDebug() << "Exit application with code" << retval;
+  qDebug().nospace() << "Exit application with code " << retval << ".";
   return retval;
 }
 
@@ -137,20 +135,20 @@ static void configureApplicationSettings() noexcept {
 
 static void writeLogHeader() noexcept {
   // write application name and version to log
-  qInfo() << QString("LibrePCB %1 (%2)")
-                 .arg(qApp->applicationVersion(), qApp->getGitRevision());
+  qInfo().noquote() << QString("LibrePCB %1 (%2)")
+                           .arg(qApp->applicationVersion(),
+                                qApp->getGitRevision());
 
   // write Qt version to log
-  qInfo() << QString("Qt version: %1 (compiled against %2)")
-                 .arg(qVersion(), QT_VERSION_STR);
+  qInfo().noquote() << QString("Qt version: %1 (compiled against %2)")
+                           .arg(qVersion(), QT_VERSION_STR);
 
   // write resources directory path to log
-  qInfo() << QString("Resources directory: %1")
-                 .arg(qApp->getResourcesDir().toNative());
+  qInfo() << "Resources directory:" << qApp->getResourcesDir().toNative();
 
   // write application settings directory to log (nice to know for users)
-  qInfo() << QString("Application settings: %1")
-                 .arg(FilePath(QSettings().fileName()).toNative());
+  qInfo() << "Application settings:"
+          << FilePath(QSettings().fileName()).toNative();
 }
 
 /*******************************************************************************
@@ -233,44 +231,25 @@ static bool isFileFormatStableOrAcceptUnstable() noexcept {
  ******************************************************************************/
 
 static int openWorkspace(FilePath& path) {
-  // If no valid workspace path is available, ask the user to choose it.
-  if (!path.isValid()) {
-    FirstRunWizard wizard;
-    if (wizard.exec() == QDialog::Accepted) {
-      path = wizard.getWorkspaceFilePath();
-      if (wizard.getCreateNewWorkspace()) {
-        Workspace::createNewWorkspace(path);  // can throw
-      }
-      Workspace::setMostRecentlyUsedWorkspacePath(path);
-    } else {
-      throw UserCanceled(__FILE__, __LINE__);
-    }
-  }
-
-  // If the selected directory is not a valid workspace, we need to abort here
-  // to avoid the InitializeWorkspaceWizard to silently/unintentielly creating
-  // new files within the specified directory.
-  if (!Workspace::isValidWorkspacePath(path)) {
-    throw RuntimeError(
-        __FILE__, __LINE__,
-        Application::translate(
-            "Workspace", "This directory is not a valid LibrePCB workspace."));
-  }
-
-  // Migrate workspace to new major version, if needed. Note that this needs
-  // to be done *before* opening the workspace, otherwise the workspace would
-  // be default-initialized!
-  QList<Version> versions = Workspace::getFileFormatVersionsOfWorkspace(path);
-  if (!versions.contains(qApp->getFileFormatVersion())) {
-    InitializeWorkspaceWizard wizard(path);
+  InitializeWorkspaceWizard wizard(false);
+  wizard.setWorkspacePath(path);  // can throw
+  while (wizard.getNeedsToBeShown()) {
     if (wizard.exec() != QDialog::Accepted) {
       throw UserCanceled(__FILE__, __LINE__);
     }
+    Workspace::setMostRecentlyUsedWorkspacePath(wizard.getWorkspacePath());
+
+    // Just to be on the safe side that the workspace is now *really* ready
+    // to open (created, upgraded, initialized, ...), check the status again
+    // before continue opening the workspace.
+    wizard.setWorkspacePath(wizard.getWorkspacePath());  // can throw
+    wizard.restart();
   }
 
   // Open the workspace (can throw). If it is locked, a dialog will show
   // an error and possibly provides an option to override the lock.
-  Workspace ws(path, DirectoryLockHandlerDialog::createDirectoryLockCallback());
+  Workspace ws(wizard.getWorkspacePath(), wizard.getDataDir(),
+               DirectoryLockHandlerDialog::createDirectoryLockCallback());
 
   // Now since workspace settings are loaded, switch to the locale defined
   // there (until now, the system locale was used).
@@ -278,9 +257,31 @@ static int openWorkspace(FilePath& path) {
     QLocale locale(ws.getSettings().applicationLocale.get());
     QLocale::setDefault(locale);
     qApp->setTranslationLocale(locale);
+    EditorCommandSet::instance().updateTranslations();
   }
 
-  ControlPanel p(ws);
+  // Apply keyboard shortcuts from workspace settings globally.
+  auto applyKeyboardShortcuts = [&ws]() {
+    const auto& overrides = ws.getSettings().keyboardShortcuts.get();
+    EditorCommandSet& set = EditorCommandSet::instance();
+    foreach (EditorCommandCategory* category, set.getCategories()) {
+      foreach (EditorCommand* command, set.getCommands(category)) {
+        QList<QKeySequence> sequences =
+            overrides.contains(command->getIdentifier())
+            ? overrides.value(command->getIdentifier())
+            : command->getDefaultKeySequences();
+        command->setKeySequences(sequences);
+      }
+    }
+  };
+  applyKeyboardShortcuts();
+  QObject::connect(&ws.getSettings().keyboardShortcuts,
+                   &WorkspaceSettingsItem::edited,
+                   &ws.getSettings().keyboardShortcuts, applyKeyboardShortcuts);
+
+  // Open the control panel.
+  ControlPanel p(ws, wizard.getWorkspaceContainsNewerFileFormats());
+  QObject::connect(qApp, &Application::quitTriggered, &p, &ControlPanel::close);
   p.show();
 
   return appExec();

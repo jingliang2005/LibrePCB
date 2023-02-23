@@ -11,7 +11,7 @@ jobs:
       Ubuntu_1604_GCC:
         IMAGE: librepcb/librepcb-dev:ubuntu-16.04-4
       Ubuntu_1604_Qt_5_15_GCC:
-        IMAGE: librepcb/librepcb-dev:ubuntu-16.04-qt5.15.2-1
+        IMAGE: librepcb/librepcb-dev:ubuntu-16.04-qt5.15.2-2
         DEPLOY: true
         NO_HOEDOWN: true
       Ubuntu_1804_Clang:
@@ -19,10 +19,12 @@ jobs:
         CC: clang
         CXX: clang++
       Ubuntu_2004_GCC:
-        IMAGE: librepcb/librepcb-dev:ubuntu-20.04-5
+        IMAGE: librepcb/librepcb-dev:ubuntu-20.04-7
       Ubuntu_2004_Unbundled:
-        IMAGE: librepcb/librepcb-dev:ubuntu-20.04-5
+        IMAGE: librepcb/librepcb-dev:ubuntu-20.04-7
         UNBUNDLE_DXFLIB: true
+        UNBUNDLE_GTEST: true
+        UNBUNDLE_MUPARSER: true
         #UNBUNDLE_QUAZIP: true  # Note: Does not ship quazip 1.x yet
         UNBUNDLE_POLYCLIPPING: true
         LD_LIBRARY_PATH: $(Build.Repository.LocalPath)/build/install/opt/lib
@@ -43,6 +45,12 @@ jobs:
   - bash: rm -rf libs/dxflib
     displayName: Remove bundled dxflib lib
     condition: and(succeeded(), eq(variables['UNBUNDLE_DXFLIB'], 'true'))
+  - bash: rm -rf libs/googletest
+    displayName: Remove bundled googletest lib
+    condition: and(succeeded(), eq(variables['UNBUNDLE_GTEST'], 'true'))
+  - bash: rm -rf libs/muparser
+    displayName: Remove bundled muparser lib
+    condition: and(succeeded(), eq(variables['UNBUNDLE_MUPARSER'], 'true'))
   - bash: rm -rf libs/quazip
     displayName: Remove bundled quazip lib
     condition: and(succeeded(), eq(variables['UNBUNDLE_QUAZIP'], 'true'))
@@ -62,9 +70,9 @@ jobs:
     condition: and(succeeded(), eq(variables['DEPLOY'], 'true'))
   - bash: xvfb-run -a ./build/tests/unittests/librepcb-unittests
     displayName: Run LibrePCB Unittests
-  - bash: xvfb-run -a --server-args="-screen 0 1024x768x24" pytest -v --librepcb-executable="build/install/opt/bin/librepcb-cli" ./tests/cli
+  - bash: xvfb-run -a --server-args="-screen 0 1024x768x24" pytest -vvv --librepcb-executable="build/install/opt/bin/librepcb-cli" ./tests/cli
     displayName: Run LibrePCB-CLI Functional Tests
-  - bash: xvfb-run -a --server-args="-screen 0 1024x768x24" pytest -v --librepcb-executable="build/install/opt/bin/librepcb" --reruns 5 --reruns-delay 10 ./tests/funq
+  - bash: xvfb-run -a --server-args="-screen 0 1024x768x24" pytest -vvv --librepcb-executable="build/install/opt/bin/librepcb" --reruns 5 --reruns-delay 10 ./tests/funq
     displayName: Run LibrePCB Functional Tests
   - bash: ./ci/upload_artifacts.sh
     displayName: Upload Artifacts

@@ -24,6 +24,7 @@
         <file>actions/delete.png</file>
         <file>actions/down.png</file>
         <file>actions/download.png</file>
+        <file>actions/draw_arc.png</file>
         <file>actions/draw_circle.png</file>
         <file>actions/draw_line.png</file>
         <file>actions/draw_netlabel.png</file>
@@ -32,8 +33,10 @@
         <file>actions/draw_wire.png</file>
         <file>actions/drc.png</file>
         <file>actions/edit.png</file>
+        <file>actions/export.png</file>
         <file>actions/export_gerber.png</file>
         <file>actions/export_pick_place_file.png</file>
+        <file>actions/export_pixmap.png</file>
         <file>actions/export_svg.png</file>
         <file>actions/export_zip.png</file>
         <file>actions/flip_horizontal.png</file>
@@ -47,6 +50,8 @@
         <file>actions/info.png</file>
         <file>actions/layers.png</file>
         <file>actions/minus.png</file>
+        <file>actions/mirror_horizontal.png</file>
+        <file>actions/mirror_vertical.png</file>
         <file>actions/move.png</file>
         <file>actions/move_to.png</file>
         <file>actions/new.png</file>
@@ -79,7 +84,6 @@
         <file>actions/settings.png</file>
         <file>actions/show_planes.png</file>
         <file>actions/stop.png</file>
-        <file>actions/swap.png</file>
         <file>actions/undo.png</file>
         <file>actions/up.png</file>
         <file>actions/working.png</file>
@@ -100,6 +104,7 @@
         <file>command_toolbars/shape_octagon.png</file>
         <file>command_toolbars/shape_rect.png</file>
         <file>command_toolbars/shape_round.png</file>
+        <file>command_toolbars/shape_rounded_rect.png</file>
         <file>command_toolbars/via_octagon.png</file>
         <file>command_toolbars/via_round.png</file>
         <file>command_toolbars/via_square.png</file>
@@ -142,6 +147,7 @@
         <file>status/dialog_warning.png</file>
         <file>status/info.png</file>
         <file>status/success.png</file>
+        <file>wizards/eagle_watermark.png</file>
         <file>wizards/watermark.jpg</file>
     </qresource>
 </RCC>

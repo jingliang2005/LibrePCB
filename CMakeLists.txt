@@ -1,9 +1,16 @@
-# CMake version configuration
+﻿# CMake version configuration
 # (Note: The minimal version 3.5 is shipped with Ubuntu 16.04)
 cmake_minimum_required(VERSION 3.5...3.19)
 if(${CMAKE_VERSION} VERSION_LESS 3.12)
   cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
 endif()
+
+# Support older macOS versions. Needs to be set before calling project()!
+# https://github.com/LibrePCB/LibrePCB/issues/1091
+set(CMAKE_OSX_DEPLOYMENT_TARGET
+    "10.14"
+    CACHE STRING "Minimum OS X deployment version"
+)
 
 # WARNING:
 # Read the release workflow documentation (at https://developers.librepcb.org)
@@ -61,15 +68,6 @@ set(BUILD_SHARED_LIBS
 
 # Auto-include current directory
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-# Require out-of-source builds
-file(TO_CMAKE_PATH "${PROJECT_BINARY_DIR}/CMakeLists.txt" LOC_PATH)
-if(EXISTS "${LOC_PATH}")
-  message(
-    FATAL_ERROR
-      "You cannot build in a source directory (or any directory with a CMakeLists.txt file). Please make a build subdirectory. Feel free to remove CMakeCache.txt and CMakeFiles."
-  )
-endif()
 
 # Use C++11
 set(CMAKE_CXX_STANDARD 11)
@@ -146,14 +144,9 @@ if(Qt5Core_VERSION VERSION_LESS 5.14)
   find_package(Hoedown REQUIRED)
 endif()
 
-# Add libs 添加库
-add_subdirectory(libs/librepcb/common)
-add_subdirectory(libs/librepcb/library)
-add_subdirectory(libs/librepcb/project)
-add_subdirectory(libs/librepcb/workspace)
-add_subdirectory(libs/librepcb/projecteditor)
-add_subdirectory(libs/librepcb/libraryeditor)
-add_subdirectory(libs/librepcb/librarymanager)
+# Add libs
+add_subdirectory(libs/librepcb/core)
+add_subdirectory(libs/librepcb/editor)
 add_subdirectory(libs/librepcb/eagleimport)
 add_subdirectory(libs/parseagle)
 
@@ -161,7 +154,6 @@ add_subdirectory(libs/parseagle)
 #add_subdirectory(apps/librepcb)
 add_subdirectory(apps/librepcb-cli)
 add_subdirectory(apps/UuidGenerator)
-add_subdirectory(apps/EagleImport)
 
 # Add unittests
 if(BUILD_TESTS)
